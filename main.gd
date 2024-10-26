@@ -1,3 +1,4 @@
+@tool
 extends Control
 
 const WIDTH = 800
@@ -10,6 +11,7 @@ const HEIGHT = 400
 		visualizer_config = val
 		_set_energies()
 
+@onready var radio: Control = $Radio
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var _energies
@@ -23,8 +25,41 @@ func _set_energies():
 	_energies.fill(0.0)
 
 
+func _get_evaluated_energy():
+	if not _analyzer:
+		return
+	
+	var total = 0.0
+	var max = 0.0
+	for i in visualizer_config.segments:
+		var magnitude = _analyzer.get_magnitude_for_frequency_range(_get_freq(i / float(visualizer_config.segments)), _get_freq((i+1) / float(visualizer_config.segments))).length()
+		var energy = clampf((visualizer_config.min_db + visualizer_config.max_db - linear_to_db(magnitude)) / visualizer_config.min_db, 0, 1)
+		var speed
+		if energy > _energies[i]:
+			speed = visualizer_config.grow_speed * _frame_time_elapsed
+		else:
+			speed = visualizer_config.decay_speed * _frame_time_elapsed
+		_energies[i] = move_toward(_energies[i], energy, speed)
+		
+		total += _energies[i]
+		max = max(max, _energies[i])
+	
+	var eval = max
+	if visualizer_config.eval_type == VisualizerConfig.EvalType.AVERAGE:
+		eval = total / float(visualizer_config.segments)
+	if visualizer_config.eval_curve == VisualizerConfig.EvalCurve.QUADRATIC:
+		eval = pow(eval, 2)
+	elif visualizer_config.eval_curve == VisualizerConfig.EvalCurve.CUBIC:
+		eval = pow(eval, 3)
+	
+	return eval
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if Engine.is_editor_hint():
+		return
+	
 	var index = AudioServer.get_bus_index("Analyzer")
 	if index == -1:
 		print("Did not find bus")
@@ -41,53 +76,13 @@ func _ready():
 	audio_stream_player.play()
 
 
-func _draw():
-	if not _analyzer:
-		return
-	
-	var total = 0.0
-	var max = 0.0
-	
-	for i in visualizer_config.segments:
-		total += _energies[i]
-		max = max(max, _energies[i])
-		var width = WIDTH / visualizer_config.segments
-		
-		draw_rect(
-			Rect2(i * width, 0, width - 2.0, _energies[i] * HEIGHT),
-			Color.WHITE
-		)
-	
-	var eval = max
-	if visualizer_config.eval_type == VisualizerConfig.EvalType.AVERAGE:
-		eval = total / float(visualizer_config.segments)
-	if visualizer_config.eval_curve == VisualizerConfig.EvalCurve.QUADRATIC:
-		eval = pow(eval, 2)
-	elif visualizer_config.eval_curve == VisualizerConfig.EvalCurve.CUBIC:
-		eval = pow(eval, 3)
-	draw_circle(Vector2(WIDTH, HEIGHT), 60.0, Color.WEB_GRAY)
-	draw_circle(Vector2(WIDTH, HEIGHT), eval * 60.0, Color.WHITE)
-
-
 func _process(delta):
 	if not _analyzer:
 		return
 	
 	_frame_time_elapsed += delta
 	if _frame_time_elapsed > (1.0 / float(redraws_per_second)):
-		for i in visualizer_config.segments:
-			var magnitude = _analyzer.get_magnitude_for_frequency_range(_get_freq(i / float(visualizer_config.segments)), _get_freq((i+1) / float(visualizer_config.segments))).length()
-			var energy = clampf((visualizer_config.min_db + visualizer_config.max_db - linear_to_db(magnitude)) / visualizer_config.min_db, 0, 1)
-			var speed
-			if energy > _energies[i]:
-				speed = visualizer_config.grow_speed * _frame_time_elapsed
-			else:
-				speed = visualizer_config.decay_speed * _frame_time_elapsed
-			_energies[i] = move_toward(_energies[i], energy, speed)
-		
-		# Sound plays back continuously, so the graph needs to be updated every frame.
-		queue_redraw()
-		
+		radio.bump_energy = _get_evaluated_energy()
 		_frame_time_elapsed = 0
 
 

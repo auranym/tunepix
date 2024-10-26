@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://balwixy7ok4wx"]
+[gd_scene load_steps=5 format=3 uid="uid://balwixy7ok4wx"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oigfu"]
 [ext_resource type="AudioStream" uid="uid://c8rv2iwmv6781" path="res://test_music/silt_spawn_3.wav" id="2_6p4lr"]
 [ext_resource type="Resource" uid="uid://b6n1spv8ueygm" path="res://test_music/silt_spawn_3.tres" id="2_kk8jc"]
+[ext_resource type="PackedScene" uid="uid://beqk8tsxa4qmt" path="res://radio.tscn" id="4_acdnc"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -13,6 +14,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oigfu")
 visualizer_config = ExtResource("2_kk8jc")
+
+[node name="Radio" parent="." instance=ExtResource("4_acdnc")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -67.0
+offset_right = 70.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+bump_energy = null
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_6p4lr")

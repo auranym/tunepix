@@ -1,6 +1,10 @@
 @tool
 extends Control
 
+@export_range(0.0, 1.0) var bump_energy = 0.0:
+	set(val):
+		bump_energy = val
+		queue_redraw()
 @export var config: RadioConfig:
 	set(val):
 		if config:
@@ -143,7 +147,7 @@ func _draw_background():
 
 func _draw_speaker():
 	var speaker_max_radius = config.speaker_radius + config.speaker_bump_radius
-	var speaker_animated_dist = 0 # TODO
+	var speaker_animated_dist = 0 if not bump_energy else bump_energy * config.speaker_bump_radius
 	var speaker_animated_radius = config.speaker_radius + speaker_animated_dist
 	
 	# Speaker circle
