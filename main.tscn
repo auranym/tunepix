@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://balwixy7ok4wx"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_oigfu"]
+[ext_resource type="AudioStream" uid="uid://c8rv2iwmv6781" path="res://test_music/silt_spawn_3.wav" id="2_6p4lr"]
+[ext_resource type="Resource" uid="uid://b6n1spv8ueygm" path="res://test_music/silt_spawn_3.tres" id="2_kk8jc"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oigfu")
+visualizer_config = ExtResource("2_kk8jc")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_6p4lr")
+bus = &"Analyzer"
