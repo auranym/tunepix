@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="VisualizerConfig" load_steps=2 format=3 uid="uid://lawwojtu0158"]
+
+[ext_resource type="Script" path="res://visualizer_config.gd" id="1_5lxxt"]
+
+[resource]
+script = ExtResource("1_5lxxt")
+segments = 4
+freq_min = 128.0
+freq_max = 2000.0
+freq_curve = 0
+min_db = -35.0
+max_db = -20.0
+decay_speed = 1.0
+grow_speed = 3.0
+eval_type = 1
+eval_curve = 0

@@ -15,6 +15,10 @@ enum ColorTheme {
 	set(val):
 		art_outline = val
 		emit_changed()
+@export_range(0, 32, 1) var art_padding := 8:
+	set(val):
+		art_padding = val
+		emit_changed()
 
 @export_group("Colors", "color_")
 @export var color_light: Color = Color.WHITE:
@@ -34,11 +38,7 @@ enum ColorTheme {
 		color_theme = val
 		emit_changed()
 
-@export_group("Spacing")
-@export_range(0, 32, 1) var padding := 8:
-	set(val):
-		padding = val
-		emit_changed()
+@export_group("Box")
 @export_range(0, 32, 1) var border_radius := 8:
 	set(val):
 		border_radius = val
@@ -47,6 +47,7 @@ enum ColorTheme {
 	set(val):
 		gap = val
 		emit_changed()
+
 
 @export_group("Speaker", "speaker_")
 @export var speaker_outline := false:
@@ -65,6 +66,11 @@ enum ColorTheme {
 	set(val):
 		speaker_partitions = val
 		emit_changed()
+@export_range(0, 32, 1) var speaker_padding := 8:
+	set(val):
+		speaker_padding = val
+		emit_changed()
+
 
 @export_group("Antenna", "antenna_")
 @export var antenna_visible := true:

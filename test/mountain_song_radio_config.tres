@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RadioConfig" load_steps=3 format=3 uid="uid://351bukpac5mk"]
+
+[ext_resource type="Texture2D" uid="uid://b4o8sbawfygnj" path="res://test_art/mountain_song_base.png" id="1_2jo25"]
+[ext_resource type="Script" path="res://radio_config.gd" id="2_im2e3"]
+
+[resource]
+script = ExtResource("2_im2e3")
+art = ExtResource("1_2jo25")
+art_outline = true
+art_padding = 12
+color_light = Color(0.0235294, 0.196078, 0.164706, 1)
+color_med = Color(0.0235294, 0.196078, 0.164706, 1)
+color_dark = Color(0.0627451, 0.298039, 0.254902, 1)
+color_theme = 1
+border_radius = 12
+gap = 2
+speaker_outline = false
+speaker_radius = 16
+speaker_bump_radius = 8
+speaker_partitions = 3
+speaker_padding = 4
+antenna_visible = true
+antenna_length = 80
+antenna_width = 4
+antenna_receiver_radius = 3
+antenna_angle = 19

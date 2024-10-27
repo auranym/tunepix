@@ -1,12 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://beqk8tsxa4qmt"]
+[gd_scene load_steps=2 format=3 uid="uid://beqk8tsxa4qmt"]
 
 [ext_resource type="Script" path="res://radio.gd" id="1_af1p5"]
-[ext_resource type="Resource" uid="uid://351bukpac5mk" path="res://test/mountain_song_config.tres" id="2_m821r"]
 
 [node name="Radio" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 140.0
-offset_bottom = 134.0
+offset_right = 136.0
+offset_bottom = 137.0
 script = ExtResource("1_af1p5")
-config = ExtResource("2_m821r")
