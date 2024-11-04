@@ -5,6 +5,16 @@ enum ColorTheme {
 	LIGHT,
 	DARK,
 }
+enum SpeakerPlacement {
+	LEFT,
+	BOTH,
+	RIGHT,
+}
+enum SpeakerAlignment {
+	TOP,
+	CENTER,
+	BOTTOM,
+}
 
 @export_group("Art", "art_")
 @export var art: Texture2D:
@@ -50,6 +60,14 @@ enum ColorTheme {
 
 
 @export_group("Speaker", "speaker_")
+@export var speaker_placement: SpeakerPlacement = SpeakerPlacement.RIGHT:
+	set(val):
+		speaker_placement = val
+		emit_changed()
+@export var speaker_alignment: SpeakerAlignment = SpeakerAlignment.CENTER:
+	set(val):
+		speaker_alignment = val
+		emit_changed()
 @export var speaker_outline := false:
 	set(val):
 		speaker_outline = val

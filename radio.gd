@@ -39,12 +39,20 @@ func _set_radio_size():
 		
 		var speaker_length = 2 * (config.speaker_radius + config.speaker_bump_radius)
 		var width = (
-			config.art_padding
-			+ config.art.get_width()
+			config.art.get_width()
 			+ config.gap
 			+ speaker_length
 			+ config.speaker_padding
 		)
+		if config.speaker_placement == RadioConfig.SpeakerPlacement.BOTH:
+			width += (
+				config.gap
+				+ speaker_length
+				+ config.speaker_padding
+			)
+		else:
+			width += config.art_padding
+		
 		var height = max(
 			2 * config.art_padding + config.art.get_height(),
 			2 * config.speaker_padding + speaker_length
@@ -74,7 +82,7 @@ func _draw() -> void:
 	if config.antenna_visible:
 		_draw_antenna()
 	_draw_background()
-	_draw_speaker()
+	_draw_speakers()
 	_draw_displayed_texture()
 
 
@@ -165,25 +173,56 @@ func _draw_background():
 	)
 
 
-func _draw_speaker():
+func _draw_speakers():
+	var speaker_max_radius = config.speaker_radius + config.speaker_bump_radius
+	var speaker_y_pos
+	match config.speaker_alignment:
+		RadioConfig.SpeakerAlignment.TOP:
+			speaker_y_pos = _box_rect.position.y + config.speaker_padding
+		RadioConfig.SpeakerAlignment.CENTER:
+			speaker_y_pos = _box_rect.position.y + _box_rect.size.y / 2.0 - speaker_max_radius
+		RadioConfig.SpeakerAlignment.BOTTOM:
+			speaker_y_pos = _box_rect.position.y + _box_rect.size.y - config.speaker_padding - 2 * speaker_max_radius
+		
+	# Draw left speaker
+	if config.speaker_placement != RadioConfig.SpeakerPlacement.RIGHT:
+		_draw_speaker(
+			Vector2(
+				_box_rect.position.x + config.speaker_padding,
+				speaker_y_pos
+			)
+		)
+	# Draw right speaker
+	if config.speaker_placement != RadioConfig.SpeakerPlacement.LEFT:
+		_draw_speaker(
+			Vector2(
+				_box_rect.position.x + _box_rect.size.x - config.speaker_padding - 2 * speaker_max_radius,
+				speaker_y_pos
+			)
+		)
+
+
+# pos is top-left
+func _draw_speaker(pos: Vector2):
 	var speaker_max_radius = config.speaker_radius + config.speaker_bump_radius
 	var speaker_animated_dist = 0 if not bump_energy else bump_energy * config.speaker_bump_radius
 	var speaker_animated_radius = config.speaker_radius + speaker_animated_dist
 	
 	# Speaker circle
 	draw_circle(
-		Vector2(
-			_box_rect.position.x + _box_rect.size.x - config.speaker_padding - speaker_max_radius,
-			_box_rect.position.y + config.speaker_padding + speaker_max_radius
-		),
+		pos + Vector2(speaker_max_radius, speaker_max_radius),
 		speaker_animated_radius,
 		config.color_dark if config.color_theme == RadioConfig.ColorTheme.LIGHT else config.color_light
 	)
 	# Speaker partitions
-	var partition_base_position = Vector2(
-		_box_rect.position.x + _box_rect.size.x - config.speaker_padding - speaker_max_radius - speaker_animated_radius,
-		_box_rect.position.y + config.speaker_padding + config.speaker_bump_radius - speaker_animated_dist
+	var partition_base_position = pos + Vector2(
+		config.speaker_bump_radius - speaker_animated_dist,
+		config.speaker_bump_radius - speaker_animated_dist
 	)
+	#Vector2(
+		#_box_rect.position.x + _box_rect.size.x - config.speaker_padding - speaker_max_radius - speaker_animated_radius,
+		#_box_rect.position.y + config.speaker_padding + config.speaker_bump_radius - speaker_animated_dist
+	#)
 	var partition_width = 2 * speaker_animated_radius / float(2 * config.speaker_partitions + 1)
 	for i in (2 * config.speaker_partitions + 1):
 		if i % 2 == 1:
@@ -197,10 +236,7 @@ func _draw_speaker():
 	# Speaker outline
 	if config.speaker_outline:
 		draw_circle(
-			Vector2(
-				_box_rect.position.x + _box_rect.size.x - config.speaker_padding - speaker_max_radius,
-				_box_rect.position.y + config.speaker_padding + speaker_max_radius
-			),
+			pos + Vector2(speaker_max_radius, speaker_max_radius),
 			speaker_animated_radius + 1,
 			config.color_med,
 			false,
@@ -210,7 +246,12 @@ func _draw_speaker():
 
 func _draw_displayed_texture():
 	var art_size = config.art.get_size()
-	var art_position = _box_rect.position + Vector2(config.art_padding, config.art_padding) 
+	var art_position = _box_rect.position + Vector2(
+		config.art_padding if config.speaker_placement == RadioConfig.SpeakerPlacement.RIGHT else (
+			config.speaker_padding + 2 * (config.speaker_radius + config.speaker_bump_radius) + config.gap
+		),
+		config.art_padding
+	)
 	if config.art_outline:
 		_draw_rounded_rect(
 			Rect2(
