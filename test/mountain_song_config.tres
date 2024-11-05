@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="TunePixConfig" load_steps=4 format=3 uid="uid://cp6o4iqojijar"]
+
+[ext_resource type="Texture2D" uid="uid://b4o8sbawfygnj" path="res://test_art/mountain_song_base.png" id="1_7sgp7"]
+[ext_resource type="Script" path="res://tune_pix_config.gd" id="1_16ugh"]
+[ext_resource type="AudioStream" uid="uid://dujn26w6p5w2x" path="res://test_music/mountain song.wav" id="2_2oeph"]
+
+[resource]
+script = ExtResource("1_16ugh")
+stream = ExtResource("2_2oeph")
+bpm = 33.333
+bus_index = 1
+spectrum_analyzer_effect_index = 0
+segments = 4
+freq_min = 128.0
+freq_max = 2000.0
+freq_curve = 0
+min_db = -35.0
+max_db = -15.0
+decay_speed = 1.0
+grow_speed = 3.0
+eval_type = 0
+eval_curve = 0
+fps = 24
+art = ExtResource("1_7sgp7")
+art_outline = true
+art_padding = 12
+color_light = Color(0.0235294, 0.196078, 0.164706, 1)
+color_med = Color(0.0235294, 0.196078, 0.164706, 1)
+color_dark = Color(0.0627451, 0.298039, 0.254902, 1)
+color_theme = 1
+border_radius = 12
+gap = 0
+speaker_placement = 0
+speaker_alignment = 1
+speaker_outline = false
+speaker_radius = 20
+speaker_bump_radius = 10
+speaker_partitions = 3
+speaker_padding = 4
+antenna_visible = true
+antenna_length = 80
+antenna_width = 4
+antenna_receiver_radius = 3
+antenna_angle = 19
