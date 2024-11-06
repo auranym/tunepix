@@ -1,10 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://balwixy7ok4wx"]
+[gd_scene load_steps=3 format=3 uid="uid://balwixy7ok4wx"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_oigfu"]
-[ext_resource type="Resource" uid="uid://lawwojtu0158" path="res://test/mountain_song_visualizer_config.tres" id="2_bsv5f"]
-[ext_resource type="Resource" uid="uid://351bukpac5mk" path="res://test/mountain_song_radio_config.tres" id="4_1oibb"]
-[ext_resource type="PackedScene" uid="uid://beqk8tsxa4qmt" path="res://radio.tscn" id="4_acdnc"]
-[ext_resource type="AudioStream" uid="uid://dujn26w6p5w2x" path="res://test_music/mountain song.wav" id="4_cl041"]
+[ext_resource type="PackedScene" uid="uid://pgc8jdh7eopn" path="res://tune_pix.tscn" id="1_avbrb"]
+[ext_resource type="Resource" uid="uid://cp6o4iqojijar" path="res://test/mountain_song_config.tres" id="2_w4g57"]
 
 [node name="SubViewportContainer" type="SubViewportContainer"]
 anchors_preset = 15
@@ -29,31 +26,16 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0235294, 0.196078, 0.164706, 1)
 
-[node name="Main" type="Control" parent="SubViewport"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_oigfu")
-visualizer_config = ExtResource("2_bsv5f")
-
-[node name="Radio" parent="SubViewport/Main" instance=ExtResource("4_acdnc")]
-layout_mode = 1
+[node name="TunePix" parent="SubViewport" instance=ExtResource("1_avbrb")]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -73.0
-offset_top = -61.5
-offset_right = 67.0
-offset_bottom = 61.5
+offset_left = -68.0
+offset_top = -57.0
+offset_right = 68.0
+offset_bottom = 57.0
 grow_horizontal = 2
 grow_vertical = 2
-config = ExtResource("4_1oibb")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="SubViewport/Main"]
-stream = ExtResource("4_cl041")
-bus = &"Analyzer"
+config = ExtResource("2_w4g57")

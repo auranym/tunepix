@@ -1,16 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://pgc8jdh7eopn"]
+[gd_scene load_steps=2 format=3 uid="uid://pgc8jdh7eopn"]
 
 [ext_resource type="Script" path="res://tune_pix.gd" id="1_o2ofc"]
-[ext_resource type="Resource" uid="uid://cp6o4iqojijar" path="res://test/mountain_song_config.tres" id="2_cdoiu"]
 
 [node name="TunePix" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_o2ofc")
-config = ExtResource("2_cdoiu")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
