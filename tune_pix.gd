@@ -128,7 +128,7 @@ func _update_visuals():
 
 
 func _set_radio_size():
-	if config and config.art:
+	if config and config.art_texture:
 		# Calculate antenna bounding box height
 		var antenna_rect_height = round(
 			abs((config.antenna_length * Vector2.from_angle(deg_to_rad(config.antenna_angle + 180))).y)
@@ -138,14 +138,14 @@ func _set_radio_size():
 		
 		var speaker_length = 2 * (config.speaker_radius + config.speaker_bump_radius)
 		var width = (
-			config.art.get_width()
-			+ config.gap
+			config.art_texture.get_width()
+			+ config.box_gap
 			+ speaker_length
 			+ config.speaker_padding
 		)
 		if config.speaker_placement == RadioConfig.SpeakerPlacement.BOTH:
 			width += (
-				config.gap
+				config.box_gap
 				+ speaker_length
 				+ config.speaker_padding
 			)
@@ -153,19 +153,13 @@ func _set_radio_size():
 			width += config.art_padding
 		
 		var height = max(
-			2 * config.art_padding + config.art.get_height(),
+			2 * config.art_padding + config.art_texture.get_height(),
 			2 * config.speaker_padding + speaker_length
 		)
 		
 		_box_rect = Rect2(
 			Vector2(0, antenna_rect_height),
 			Vector2(width, height)
-			#(
-				#config.art.get_size()
-				#+ Vector2(config.art_padding, config.art_padding)
-				#+ Vector2(config.gap, 0)
-				#+ Vector2(2 * (config.speaker_radius + config.speaker_bump_radius), 0)
-			#)
 		)
 	else:
 		_box_rect = Rect2()
@@ -174,7 +168,7 @@ func _set_radio_size():
 
 
 func _draw():
-	if not (config and config.art):
+	if not (config and config.art_texture):
 		return
 	
 	if config.antenna_visible:
@@ -233,25 +227,24 @@ func _draw_antenna():
 		_box_rect.position.x + _box_rect.size.x - config.speaker_padding - config.speaker_bump_radius - config.speaker_radius,
 		_box_rect.position.y - config.antenna_width / 2.0
 	)
-	var color = config.color_dark if config.color_theme == RadioConfig.ColorTheme.DARK else config.color_light
 	# Connector
 	draw_line(
 		start_pos,
 		start_pos + Vector2(0, config.antenna_width / 2.0),
-		color,
+		config.antenna_color,
 		config.antenna_width
 	)
 	draw_circle(
 		start_pos,
 		config.antenna_width / 2.0,
-		color
+		config.antenna_color
 	)
 	
 	# Antenna
 	draw_line(
 		start_pos,
 		start_pos + round(config.antenna_length * unit_vector),
-		color,
+		config.antenna_color,
 		config.antenna_width
 	)
 	
@@ -259,15 +252,15 @@ func _draw_antenna():
 	draw_circle(
 		start_pos + round(config.antenna_length * unit_vector),
 		config.antenna_width / 2.0 + config.antenna_receiver_radius,
-		color
+		config.antenna_receiver_color
 	)
 
 
 func _draw_background():
 	_draw_rounded_rect(
 		_box_rect,
-		config.color_dark if config.color_theme == RadioConfig.ColorTheme.DARK else config.color_light,
-		config.border_radius
+		config.box_color,
+		config.box_border_radius
 	)
 
 
@@ -310,7 +303,7 @@ func _draw_speaker(pos: Vector2):
 	draw_circle(
 		pos + Vector2(speaker_max_radius, speaker_max_radius),
 		speaker_animated_radius,
-		config.color_dark if config.color_theme == RadioConfig.ColorTheme.LIGHT else config.color_light
+		config.speaker_color
 	)
 	# Speaker partitions
 	var partition_base_position = pos + Vector2(
@@ -329,37 +322,38 @@ func _draw_speaker(pos: Vector2):
 					partition_base_position + Vector2(0, i * partition_width),
 					Vector2(2 * speaker_animated_radius, partition_width)
 				),
-				config.color_light if config.color_theme == RadioConfig.ColorTheme.LIGHT else config.color_dark
+				config.box_color
 			)
 	# Speaker outline
 	if config.speaker_outline:
 		draw_circle(
 			pos + Vector2(speaker_max_radius, speaker_max_radius),
 			speaker_animated_radius + 1,
-			config.color_med,
+			config.speaker_outline_color,
 			false,
-			2
+			config.speaker_outline_size
 		)
 
 
 func _draw_displayed_texture():
-	var art_size = config.art.get_size()
+	var art_size = config.art_texture.get_size()
 	var art_position = _box_rect.position + Vector2(
 		config.art_padding if config.speaker_placement == RadioConfig.SpeakerPlacement.RIGHT else (
-			config.speaker_padding + 2 * (config.speaker_radius + config.speaker_bump_radius) + config.gap
+			config.speaker_padding + 2 * (config.speaker_radius + config.speaker_bump_radius) + config.box_gap
 		),
 		config.art_padding
 	)
+	var outline_size = config.art_outline_size
 	if config.art_outline:
 		_draw_rounded_rect(
 			Rect2(
-				art_position - Vector2(2, 2),
-				art_size + Vector2(4, 4)
+				art_position - Vector2(outline_size, outline_size),
+				art_size + 2 * Vector2(outline_size, outline_size)
 			),
-			config.color_med,
-			2
+			config.art_outline_color,
+			outline_size
 		)
-	draw_texture(config.art, art_position)
+	draw_texture(config.art_texture, art_position)
 
 
 # Signal callbacks

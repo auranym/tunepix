@@ -20,10 +20,6 @@ enum EvalCurve {
 }
 
 # Radio
-enum ColorTheme {
-	LIGHT,
-	DARK,
-}
 enum SpeakerPlacement {
 	LEFT,
 	BOTH,
@@ -98,45 +94,39 @@ enum SpeakerAlignment {
 @export var fps := 24
 
 @export_subgroup("Art", "art_")
-@export var art: Texture2D:
+@export var art_texture: Texture2D:
 	set(val):
-		art = val
+		art_texture = val
 		visuals_changed.emit()
 @export var art_outline := true:
 	set(val):
 		art_outline = val
+		visuals_changed.emit()
+@export_range(0, 16, 1) var art_outline_size = 2:
+	set(val):
+		art_outline_size = val
+		visuals_changed.emit()
+@export var art_outline_color := Color.GRAY:
+	set(val):
+		art_outline_color = val
 		visuals_changed.emit()
 @export_range(0, 32, 1) var art_padding := 8:
 	set(val):
 		art_padding = val
 		visuals_changed.emit()
 
-@export_subgroup("Colors", "color_")
-@export var color_light: Color = Color.WHITE:
+@export_subgroup("Box", "box_")
+@export var box_color: Color = Color.WHITE:
 	set(val):
-		color_light = val
+		box_color = val
 		visuals_changed.emit()
-@export var color_med: Color = Color.GRAY:
+@export_range(0, 32, 1) var box_border_radius := 8:
 	set(val):
-		color_med = val
+		box_border_radius = val
 		visuals_changed.emit()
-@export var color_dark: Color = Color.BLACK:
+@export_range(0, 32, 1) var box_gap := 8:
 	set(val):
-		color_dark = val
-		visuals_changed.emit()
-@export var color_theme: ColorTheme = ColorTheme.LIGHT:
-	set(val):
-		color_theme = val
-		visuals_changed.emit()
-
-@export_subgroup("Box")
-@export_range(0, 32, 1) var border_radius := 8:
-	set(val):
-		border_radius = val
-		visuals_changed.emit()
-@export_range(0, 32, 1) var gap := 8:
-	set(val):
-		gap = val
+		box_gap = val
 		visuals_changed.emit()
 
 @export_subgroup("Speaker", "speaker_")
@@ -148,9 +138,21 @@ enum SpeakerAlignment {
 	set(val):
 		speaker_alignment = val
 		visuals_changed.emit()
+@export var speaker_color: Color = Color.BLACK:
+	set(val):
+		speaker_color = val
+		visuals_changed.emit()
 @export var speaker_outline := false:
 	set(val):
 		speaker_outline = val
+		visuals_changed.emit()
+@export_range(0, 16, 1) var speaker_outline_size = 2:
+	set(val):
+		speaker_outline_size = val
+		visuals_changed.emit()
+@export var speaker_outline_color: Color = Color.GRAY:
+	set(val):
+		speaker_outline_color = val
 		visuals_changed.emit()
 @export_range(1, 64, 1) var speaker_radius := 24:
 	set(val):
@@ -174,6 +176,10 @@ enum SpeakerAlignment {
 	set(val):
 		antenna_visible = val
 		visuals_changed.emit()
+@export var antenna_color: Color = Color.WHITE:
+	set(val):
+		antenna_color = val
+		visuals_changed.emit()
 @export_range(0, 256, 1) var antenna_length = 64:
 	set(val):
 		antenna_length = val
@@ -185,6 +191,10 @@ enum SpeakerAlignment {
 @export_range(0, 32, 1) var antenna_receiver_radius = 2:
 	set(val):
 		antenna_receiver_radius = val
+		visuals_changed.emit()
+@export var antenna_receiver_color: Color = Color.WHITE:
+	set(val):
+		antenna_receiver_color = val
 		visuals_changed.emit()
 @export_range(0, 90, 1) var antenna_angle = 30:
 	set(val):
