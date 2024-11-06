@@ -14,12 +14,12 @@ extends Control
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 # Private vars
-# Audio-related
 var _energies
 var _frame_time_elapsed: float = 1.0
+var _beat_time_elapsed: float = 0.0
 var _analyzer: AudioEffectSpectrumAnalyzerInstance
 var _bump_energy: float = 0.0
-# Visuals-related
+var _beat_energy: float = 0.0
 var _box_rect: Rect2
 
 
@@ -32,6 +32,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	
+	_beat_time_elapsed += delta
+	var beat_in_ms = _get_beat_in_secs()
+	if _beat_time_elapsed >= beat_in_ms:
+		_beat_time_elapsed -= beat_in_ms
 	
 	_frame_time_elapsed += delta
 	if _frame_time_elapsed > (1.0 / float(config.fps)):
@@ -119,6 +124,16 @@ func _get_freq(x):
 		weight = pow(x, 2)
 	
 	return lerp(config.freq_min, config.freq_max, weight)
+
+
+func _get_beat_in_secs():
+	if config.bpm == 0.0:
+		return INF
+	return 60.0 / config.bpm
+
+
+func _get_beat_energy():
+	return clamp(_beat_time_elapsed / _get_beat_in_secs(), 0.0, 1.0)
 
 
 # Visuals functionss
@@ -221,8 +236,30 @@ func _draw_rounded_rect(rect: Rect2, color: Color, radius: float):
 	)
 
 
+func _get_beat_bump_angle_offset():
+	if Engine.is_editor_hint():
+		return 0.0
+	
+	var elapsed = clamp(fposmod((_get_beat_energy() + config.antenna_beat_bump_anticipation), 1.0) / config.antenna_beat_bump_length, 0.0, 1.0)
+	return Tween.interpolate_value(
+		config.antenna_beat_bump_angle,
+		-1 * config.antenna_beat_bump_angle,
+		elapsed,
+		1.0,
+		config.antenna_beat_bump_trans,
+		config.antenna_beat_bump_ease
+	)
+
+
 func _draw_antenna():
-	var unit_vector = Vector2.from_angle(deg_to_rad(config.antenna_angle + 180))
+	var beat_angle_offset = _get_beat_bump_angle_offset() if config.antenna_beat_bump else 0.0
+	var unit_vector = Vector2.from_angle(deg_to_rad(
+		clamp(
+			config.antenna_angle + 180 + beat_angle_offset,
+			180,
+			270
+		)
+	))
 	var start_pos = Vector2(
 		_box_rect.position.x + _box_rect.size.x - config.speaker_padding - config.speaker_bump_radius - config.speaker_radius,
 		_box_rect.position.y - config.antenna_width / 2.0
@@ -310,10 +347,6 @@ func _draw_speaker(pos: Vector2):
 		config.speaker_bump_radius - speaker_animated_dist,
 		config.speaker_bump_radius - speaker_animated_dist
 	)
-	#Vector2(
-		#_box_rect.position.x + _box_rect.size.x - config.speaker_padding - speaker_max_radius - speaker_animated_radius,
-		#_box_rect.position.y + config.speaker_padding + config.speaker_bump_radius - speaker_animated_dist
-	#)
 	var partition_width = 2 * speaker_animated_radius / float(2 * config.speaker_partitions + 1)
 	for i in (2 * config.speaker_partitions + 1):
 		if i % 2 == 1:

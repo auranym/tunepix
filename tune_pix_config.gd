@@ -200,3 +200,27 @@ enum SpeakerAlignment {
 	set(val):
 		antenna_angle = val
 		visuals_changed.emit()
+@export var antenna_beat_bump := false:
+	set(val):
+		antenna_beat_bump = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_ease: Tween.EaseType = Tween.EaseType.EASE_OUT:
+	set(val):
+		antenna_beat_bump_ease = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_trans: Tween.TransitionType = Tween.TransitionType.TRANS_QUAD:
+	set(val):
+		antenna_beat_bump_trans = val
+		visuals_changed.emit()
+@export_range(-90.0, 90.0) var antenna_beat_bump_angle = 30.0:
+	set(val):
+		antenna_beat_bump_angle = val
+		visuals_changed.emit()
+@export_range(0.0, 1.0) var antenna_beat_bump_length = 0.5:
+	set(val):
+		antenna_beat_bump_length = val
+		visuals_changed.emit()
+@export_range(0.0, 1.0) var antenna_beat_bump_anticipation = 0.0:
+	set(val):
+		antenna_beat_bump_anticipation = val
+		visuals_changed.emit()
