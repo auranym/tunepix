@@ -369,27 +369,48 @@ func _draw_speaker(pos: Vector2):
 	)
 	# Speaker partitions
 	var partition_base_position = pos + Vector2(
-		config.speaker_bump_radius - speaker_animated_dist,
+		speaker_max_radius - speaker_animated_dist,
 		config.speaker_bump_radius - speaker_animated_dist
 	)
 	var partition_width = 2 * speaker_animated_radius / float(2 * config.speaker_partitions + 1)
 	for i in (2 * config.speaker_partitions + 1):
 		if i % 2 == 1:
-			draw_rect(
-				Rect2(
-					partition_base_position + Vector2(0, i * partition_width),
-					Vector2(2 * speaker_animated_radius, partition_width)
-				),
-				config.box_color
+			var x_dist_top = sqrt(pow(speaker_animated_radius, 2) - pow(i * partition_width - speaker_animated_radius, 2))
+			var x_dist_bottom = sqrt(pow(speaker_animated_radius, 2) - pow((i+1) * partition_width - speaker_animated_radius, 2))
+			# Since masking is not available, the edges of the speaker circle
+			# must be approximated. Do this by finding the x value of the desired heights,
+			# then taking the ceiling.
+			draw_colored_polygon(
+				PackedVector2Array([
+					# Top-left
+					partition_base_position + Vector2((speaker_animated_dist - ceil(x_dist_top)), i * partition_width),
+					# Top-right
+					partition_base_position + Vector2((speaker_animated_dist + ceil(x_dist_top)), i * partition_width),
+					# Bottom-right
+					partition_base_position + Vector2((speaker_animated_dist + ceil(x_dist_bottom)), (i+1) * partition_width),
+					# Bottom-left
+					partition_base_position + Vector2((speaker_animated_dist - ceil(x_dist_bottom)), (i+1) * partition_width),
+				]),
+				config.speaker_partitions_color
 			)
-	# Speaker outline
-	if config.speaker_outline:
+	# Add a small outline to cover up partition "overhang"
+	if config.speaker_partitions > 0:
 		draw_circle(
 			pos + Vector2(speaker_max_radius, speaker_max_radius),
-			speaker_animated_radius + 1,
+			speaker_animated_radius,
+			config.box_color,
+			false,
+			2
+		)
+	
+	# Speaker outline
+	if config.speaker_outline and config.speaker_outline_size > 0:
+		draw_circle(
+			pos + Vector2(speaker_max_radius, speaker_max_radius),
+			speaker_animated_radius,
 			config.speaker_outline_color,
 			false,
-			config.speaker_outline_size
+			config.speaker_outline_size + 1
 		)
 
 

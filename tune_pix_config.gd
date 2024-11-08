@@ -166,6 +166,10 @@ enum SpeakerAlignment {
 	set(val):
 		speaker_partitions = val
 		visuals_changed.emit()
+@export var speaker_partitions_color: Color = Color.WHITE:
+	set(val):
+		speaker_partitions_color = val
+		visuals_changed.emit()
 @export_range(0, 32, 1) var speaker_padding := 8:
 	set(val):
 		speaker_padding = val
