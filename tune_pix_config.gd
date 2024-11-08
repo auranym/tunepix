@@ -200,17 +200,11 @@ enum SpeakerAlignment {
 	set(val):
 		antenna_angle = val
 		visuals_changed.emit()
-@export var antenna_beat_bump := false:
+
+@export_subgroup("Antenna Beat Bump", "antenna_beat_bump_")
+@export var antenna_beat_bump_enabled := false:
 	set(val):
-		antenna_beat_bump = val
-		visuals_changed.emit()
-@export var antenna_beat_bump_ease: Tween.EaseType = Tween.EaseType.EASE_OUT:
-	set(val):
-		antenna_beat_bump_ease = val
-		visuals_changed.emit()
-@export var antenna_beat_bump_trans: Tween.TransitionType = Tween.TransitionType.TRANS_QUAD:
-	set(val):
-		antenna_beat_bump_trans = val
+		antenna_beat_bump_enabled = val
 		visuals_changed.emit()
 @export_range(-90.0, 90.0) var antenna_beat_bump_angle = 30.0:
 	set(val):
@@ -220,7 +214,37 @@ enum SpeakerAlignment {
 	set(val):
 		antenna_beat_bump_length = val
 		visuals_changed.emit()
-@export_range(0.0, 1.0) var antenna_beat_bump_anticipation = 0.0:
+@export_range(0.0, 1.0) var antenna_beat_bump_start = 0.0:
 	set(val):
-		antenna_beat_bump_anticipation = val
+		antenna_beat_bump_start = val
+		visuals_changed.emit()
+@export_range(0.0, 1.0) var antenna_beat_bump_in_length = 0.1:
+	set(val):
+		if antenna_beat_bump_out_length:
+			antenna_beat_bump_in_length = min(val, 1.0 - antenna_beat_bump_out_length)
+		else:
+			antenna_beat_bump_in_length = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_in_trans: Tween.TransitionType = Tween.TransitionType.TRANS_QUAD:
+	set(val):
+		antenna_beat_bump_in_trans = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_in_ease: Tween.EaseType = Tween.EaseType.EASE_OUT:
+	set(val):
+		antenna_beat_bump_in_ease = val
+		visuals_changed.emit()
+@export_range(0.0, 1.0) var antenna_beat_bump_out_length = 0.1:
+	set(val):
+		if antenna_beat_bump_in_length:
+			antenna_beat_bump_out_length = min(val, 1.0 - antenna_beat_bump_in_length)
+		else:
+			antenna_beat_bump_out_length = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_out_trans: Tween.TransitionType = Tween.TransitionType.TRANS_QUAD:
+	set(val):
+		antenna_beat_bump_out_trans = val
+		visuals_changed.emit()
+@export var antenna_beat_bump_out_ease: Tween.EaseType = Tween.EaseType.EASE_OUT:
+	set(val):
+		antenna_beat_bump_out_ease = val
 		visuals_changed.emit()

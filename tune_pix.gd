@@ -237,22 +237,47 @@ func _draw_rounded_rect(rect: Rect2, color: Color, radius: float):
 
 
 func _get_beat_bump_angle_offset():
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() or config.antenna_beat_bump_length == 0.0:
 		return 0.0
 	
-	var elapsed = clamp(fposmod((_get_beat_energy() + config.antenna_beat_bump_anticipation), 1.0) / config.antenna_beat_bump_length, 0.0, 1.0)
-	return Tween.interpolate_value(
-		config.antenna_beat_bump_angle,
-		-1 * config.antenna_beat_bump_angle,
-		elapsed,
-		1.0,
-		config.antenna_beat_bump_trans,
-		config.antenna_beat_bump_ease
-	)
+	var elapsed = fposmod(
+		_get_beat_energy() + config.antenna_beat_bump_start
+		, 1.0
+	) / config.antenna_beat_bump_length
+	
+	# In
+	if elapsed < config.antenna_beat_bump_in_length:
+		return Tween.interpolate_value(
+			0.0,
+			config.antenna_beat_bump_angle,
+			elapsed,
+			config.antenna_beat_bump_in_length,
+			config.antenna_beat_bump_in_trans,
+			config.antenna_beat_bump_in_ease
+		)
+	
+	# Hold
+	elif elapsed < 1.0 - config.antenna_beat_bump_out_length:
+		return config.antenna_beat_bump_angle
+	
+	# Out
+	elif elapsed < 1.0:
+		return Tween.interpolate_value(
+			config.antenna_beat_bump_angle,
+			- config.antenna_beat_bump_angle,
+			elapsed - (1.0 - config.antenna_beat_bump_out_length),
+			config.antenna_beat_bump_out_length,
+			config.antenna_beat_bump_out_trans,
+			config.antenna_beat_bump_out_ease
+		)
+	
+	# Base
+	else:
+		return 0.0
 
 
 func _draw_antenna():
-	var beat_angle_offset = _get_beat_bump_angle_offset() if config.antenna_beat_bump else 0.0
+	var beat_angle_offset = _get_beat_bump_angle_offset() if config.antenna_beat_bump_enabled else 0.0
 	var unit_vector = Vector2.from_angle(deg_to_rad(
 		clamp(
 			config.antenna_angle + 180 + beat_angle_offset,
