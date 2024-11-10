@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="TunePixConfig" load_steps=4 format=3 uid="uid://cp6o4iqojijar"]
+
+[ext_resource type="Texture2D" uid="uid://b4o8sbawfygnj" path="res://sample/mountain_song_base.png" id="1_qaqa2"]
+[ext_resource type="Script" path="res://tune_pix_config.gd" id="2_aqn2y"]
+[ext_resource type="AudioStream" uid="uid://mxx0877f7bnl" path="res://sample/mountain song.ogg" id="3_knhn8"]
+
+[resource]
+script = ExtResource("2_aqn2y")
+stream = ExtResource("3_knhn8")
+bpm = 33.333
+bus_index = 1
+spectrum_analyzer_effect_index = 0
+segments = 4
+freq_min = 128.0
+freq_max = 2000.0
+freq_curve = 0
+min_db = -35.0
+max_db = -15.0
+decay_speed = 1.0
+grow_speed = 3.0
+eval_type = 0
+eval_curve = 0
+fps = 24
+art_texture = ExtResource("1_qaqa2")
+art_outline = true
+art_outline_size = 3
+art_outline_color = Color(0.0627451, 0.298039, 0.254902, 1)
+art_padding = 8
+box_color = Color(0.227451, 0.411765, 0.317647, 1)
+box_border_radius = 8
+box_gap = 10
+speaker_placement = 0
+speaker_alignment = 1
+speaker_color = Color(0.0235294, 0.196078, 0.164706, 1)
+speaker_outline = true
+speaker_outline_size = 2
+speaker_outline_color = Color(0.0627451, 0.298039, 0.254902, 1)
+speaker_radius = 20
+speaker_bump_radius = 10
+speaker_partitions = 3
+speaker_partitions_color = Color(0.0627451, 0.298039, 0.254902, 1)
+speaker_padding = 8
+antenna_visible = true
+antenna_placement = 1
+antenna_position = 24
+antenna_color = Color(0.0627451, 0.298039, 0.254902, 1)
+antenna_length = 80
+antenna_width = 4
+antenna_receiver_radius = 4
+antenna_receiver_color = Color(0.227451, 0.411765, 0.317647, 1)
+antenna_angle = 18
+antenna_beat_bump_enabled = true
+antenna_beat_bump_angle = 8.0
+antenna_beat_bump_length = 0.7
+antenna_beat_bump_start = 0.05
+antenna_beat_bump_in_length = 0.15
+antenna_beat_bump_in_trans = 10
+antenna_beat_bump_in_ease = 0
+antenna_beat_bump_out_length = 0.85
+antenna_beat_bump_out_trans = 4
+antenna_beat_bump_out_ease = 1

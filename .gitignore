@@ -1,1 +1,5 @@
 .godot/
+# This is for me (auranym) so I can keep
+# visualization configs in this project,
+# but keep them out of the repo :)
+projects/

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://balwixy7ok4wx"]
 
 [ext_resource type="PackedScene" uid="uid://pgc8jdh7eopn" path="res://tune_pix.tscn" id="1_avbrb"]
-[ext_resource type="Resource" uid="uid://cp6o4iqojijar" path="res://test/mountain_song_config.tres" id="2_w4g57"]
+[ext_resource type="Resource" uid="uid://cp6o4iqojijar" path="res://sample/mountain_song_config.tres" id="2_w4g57"]
 
 [node name="SubViewportContainer" type="SubViewportContainer"]
 anchors_preset = 15
