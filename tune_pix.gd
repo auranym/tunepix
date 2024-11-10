@@ -10,6 +10,7 @@ extends Control
 		if config:
 			config.audio_changed.connect(_on_config_audio_changed)
 			config.visuals_changed.connect(_on_config_visuals_changed)
+		_update_visuals()
 
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
@@ -19,7 +20,6 @@ var _frame_time_elapsed: float = 1.0
 var _beat_time_elapsed: float = 0.0
 var _analyzer: AudioEffectSpectrumAnalyzerInstance
 var _bump_energy: float = 0.0
-var _beat_energy: float = 0.0
 var _box_rect: Rect2
 
 
@@ -81,7 +81,7 @@ func _get_bump_energy():
 		return 0.0
 	
 	var total = 0.0
-	var max = 0.0
+	var m = 0.0
 	for i in config.segments:
 		var magnitude = _analyzer.get_magnitude_for_frequency_range(_get_freq(i / float(config.segments)), _get_freq((i+1) / float(config.segments))).length()
 		var energy = clampf((config.min_db + config.max_db - linear_to_db(magnitude)) / config.min_db, 0, 1)
@@ -93,9 +93,9 @@ func _get_bump_energy():
 		_energies[i] = move_toward(_energies[i], energy, speed)
 		
 		total += _energies[i]
-		max = max(max, _energies[i])
+		m = max(m, _energies[i])
 	
-	var eval = max
+	var eval = m
 	if config.eval_type == TunePixConfig.EvalType.AVERAGE:
 		eval = total / float(config.segments)
 	if config.eval_curve == TunePixConfig.EvalCurve.QUADRATIC:
