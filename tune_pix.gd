@@ -144,7 +144,9 @@ func _update_visuals():
 
 func _set_radio_size():
 	if config and config.art_texture:
-		# Calculate antenna bounding box height
+		# Calculate antenna bounding box height.
+		# The width is not taken into consideration
+		# so that the radio box's width is used for positioning.
 		var antenna_rect_height = round(
 			abs((config.antenna_length * Vector2.from_angle(deg_to_rad(config.antenna_angle + 180))).y)
 			# Not sure why 3 is the right multiplier, but it works!
@@ -277,18 +279,38 @@ func _get_beat_bump_angle_offset():
 
 
 func _draw_antenna():
+	# For the purposes of the antenna,
+	# an angle of 0 degrees is parallel with
+	# the radio box. An angle of 90 degrees
+	# is perpendicular to it.
 	var beat_angle_offset = _get_beat_bump_angle_offset() if config.antenna_beat_bump_enabled else 0.0
-	var unit_vector = Vector2.from_angle(deg_to_rad(
-		clamp(
-			config.antenna_angle + 180 + beat_angle_offset,
-			180,
-			270
-		)
-	))
+	# Unit vector depends on placement
+	var unit_vector
+	if config.antenna_placement == TunePixConfig.AntennaPlacement.RIGHT:
+		unit_vector = Vector2.from_angle(deg_to_rad(
+			clamp(
+				config.antenna_angle + 180 + beat_angle_offset,
+				180,
+				270
+			)
+		))
+	else:
+		unit_vector = Vector2.from_angle(deg_to_rad(
+			clamp(
+				-config.antenna_angle - beat_angle_offset,
+				-90,
+				0
+			)
+		))
 	var start_pos = Vector2(
-		_box_rect.position.x + _box_rect.size.x - config.speaker_padding - config.speaker_bump_radius - config.speaker_radius,
+		0.0, # X is calculated below
 		_box_rect.position.y - config.antenna_width / 2.0
 	)
+	if config.antenna_placement == TunePixConfig.AntennaPlacement.RIGHT:
+		start_pos.x = _box_rect.position.x + _box_rect.size.x - config.box_border_radius - config.antenna_position
+	else:
+		start_pos.x = _box_rect.position.x + config.box_border_radius + config.antenna_position
+	
 	# Connector
 	draw_line(
 		start_pos,

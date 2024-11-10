@@ -30,6 +30,10 @@ enum SpeakerAlignment {
 	CENTER,
 	BOTTOM,
 }
+enum AntennaPlacement {
+	LEFT,
+	RIGHT,
+}
 
 
 @export_group("Audio")
@@ -179,6 +183,14 @@ enum SpeakerAlignment {
 @export var antenna_visible := true:
 	set(val):
 		antenna_visible = val
+		visuals_changed.emit()
+@export var antenna_placement: AntennaPlacement = AntennaPlacement.RIGHT:
+	set(val):
+		antenna_placement = val
+		visuals_changed.emit()
+@export_range(0, 64, 1) var antenna_position = 16:
+	set(val):
+		antenna_position = val
 		visuals_changed.emit()
 @export var antenna_color: Color = Color.WHITE:
 	set(val):
