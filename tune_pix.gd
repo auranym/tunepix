@@ -160,7 +160,7 @@ func _set_radio_size():
 			+ speaker_length
 			+ config.speaker_padding
 		)
-		if config.speaker_placement == RadioConfig.SpeakerPlacement.BOTH:
+		if config.speaker_placement == TunePixConfig.SpeakerPlacement.BOTH:
 			width += (
 				config.box_gap
 				+ speaker_length
@@ -353,15 +353,15 @@ func _draw_speakers():
 	var speaker_max_radius = config.speaker_radius
 	var speaker_y_pos
 	match config.speaker_alignment:
-		RadioConfig.SpeakerAlignment.TOP:
+		TunePixConfig.SpeakerAlignment.TOP:
 			speaker_y_pos = _box_rect.position.y + config.speaker_padding
-		RadioConfig.SpeakerAlignment.CENTER:
+		TunePixConfig.SpeakerAlignment.CENTER:
 			speaker_y_pos = _box_rect.position.y + _box_rect.size.y / 2.0 - speaker_max_radius
-		RadioConfig.SpeakerAlignment.BOTTOM:
+		TunePixConfig.SpeakerAlignment.BOTTOM:
 			speaker_y_pos = _box_rect.position.y + _box_rect.size.y - config.speaker_padding - 2 * speaker_max_radius
 		
 	# Draw left speaker
-	if config.speaker_placement != RadioConfig.SpeakerPlacement.RIGHT:
+	if config.speaker_placement != TunePixConfig.SpeakerPlacement.RIGHT:
 		_draw_speaker(
 			Vector2(
 				_box_rect.position.x + config.speaker_padding,
@@ -369,7 +369,7 @@ func _draw_speakers():
 			)
 		)
 	# Draw right speaker
-	if config.speaker_placement != RadioConfig.SpeakerPlacement.LEFT:
+	if config.speaker_placement != TunePixConfig.SpeakerPlacement.LEFT:
 		_draw_speaker(
 			Vector2(
 				_box_rect.position.x + _box_rect.size.x - config.speaker_padding - 2 * speaker_max_radius,
@@ -441,7 +441,7 @@ func _draw_speaker(pos: Vector2):
 func _draw_displayed_texture():
 	var art_size = config.art_texture.get_size()
 	var art_position = _box_rect.position + Vector2(
-		config.art_padding if config.speaker_placement == RadioConfig.SpeakerPlacement.RIGHT else (
+		config.art_padding if config.speaker_placement == TunePixConfig.SpeakerPlacement.RIGHT else (
 			config.speaker_padding + 2 * config.speaker_radius + config.box_gap
 		),
 		config.art_padding
