@@ -37,57 +37,92 @@ enum AntennaPlacement {
 
 
 @export_group("Audio")
+## The audio file being visualized. This will be automatically
+## played when the project is run.
 @export var stream: AudioStream:
 	set(val):
 		stream = val
 		audio_changed.emit()
+## Beats per minute (BPM) of the audio file. This is used
+## for the antenna beat bump.
+## [br][br]
+## Currently, there is not support for music with
+## a changing BPM.
 @export var bpm: float = 60.0
+## Audio bus index that the music should be played from (see Audio tab
+## at the bottom of the editor). For example, "Master" is index 0.
 @export var bus_index := 0:
 	set(val):
 		bus_index = val
 		audio_changed.emit()
+## Index of the SpectrumAnalyzer effect within the audio bus. [b]This is 
+## required for audio to be visualized![/b]
 @export var spectrum_analyzer_effect_index := 0:
 	set(val):
 		spectrum_analyzer_effect_index = val
 		audio_changed.emit()
 
 @export_subgroup("Analyzer")
+## The number of frequency ranges that the visualizer will check
+## during visualizing calculations. In general, more segments means
+## a more "stable" visualization.
 @export_range(1, 12, 1) var segments := 4:
 	set(val):
 		segments = val
 		visuals_changed.emit()
+## The lowest frequency that is checked during visualization.
 @export var freq_min := 32.0:
 	set(val):
 		freq_min = val
 		visuals_changed.emit()
+## The highest frequency that is checked during visualization.
 @export var freq_max := 8000.0:
 	set(val):
 		freq_max = val
 		visuals_changed.emit()
+## The curve along which frequency segments are sampled for analysis.
+## This is nonlinear because frequencies are perceived nonlinearly.
+## For example, you can easily tell the difference between 50 and 60 hertz,
+## but not between 2050 and 2060 hertz, so it would be better to
+## make smaller segments for lower frequencies.
+## [br][br]
+## In general, Quadratic should always be used.
 @export var freq_curve: FreqCurv = FreqCurv.QUADRATIC:
 	set(val):
 		freq_curve = val
 		visuals_changed.emit()
+## Smallest decibel volume that will be considered in analysis.
+## In other words, volume lower than this will not be visualized.
 @export_range(-120.0, 0.0, 0.1) var min_db := -60.0:
 	set(val):
 		min_db = val
 		visuals_changed.emit()
+## Largest decibel volume that will be considered in analysis.
+## In other words, any volume louder than this will be considered
+## max volume.
 @export_range(-120.0, 0.0, 0.1) var max_db := -20.0:
 	set(val):
 		max_db = val
 		visuals_changed.emit()
+## How quickly a frequency segment's stored volume will decay back to 0.
 @export_range(0.0, 10.0, 0.01) var decay_speed := 1.0:
 	set(val):
 		decay_speed = val
 		visuals_changed.emit()
+## How quickly an energy segment's store volume will be increased when
+## current volume is greater than the stored volume.
 @export_range(0.0, 10.0, 0.01) var grow_speed := 2.0:
 	set(val):
 		grow_speed = val
 		visuals_changed.emit()
+## How frequency segments are combined for a final "energy" level
+## for the music being played. 
 @export var eval_type: EvalType = EvalType.MAX:
 	set(val):
 		eval_type = val
 		visuals_changed.emit()
+## How the combined "energy" level is scaled. In general,
+## these determine how "easy" it is to reach max energy.
 @export var eval_curve: EvalCurve = EvalCurve.LINEAR:
 	set(val):
 		eval_curve = val
@@ -95,9 +130,11 @@ enum AntennaPlacement {
 
 
 @export_group("Visuals")
+## Frames per second (FPS) that the visualizer is drawn.
 @export var fps := 24
 
 @export_subgroup("Art", "art_")
+## Art being displayed. [b]This is required![b]
 @export var art_texture: Texture2D:
 	set(val):
 		art_texture = val
@@ -128,6 +165,7 @@ enum AntennaPlacement {
 	set(val):
 		box_border_radius = val
 		visuals_changed.emit()
+## Space between art and speaker(s).
 @export_range(0, 32, 1) var box_gap := 8:
 	set(val):
 		box_gap = val
