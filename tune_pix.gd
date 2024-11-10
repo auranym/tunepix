@@ -153,7 +153,7 @@ func _set_radio_size():
 			+ 3 * config.antenna_receiver_radius
 		)
 		
-		var speaker_length = 2 * (config.speaker_radius + config.speaker_bump_radius)
+		var speaker_length = 2 * config.speaker_radius
 		var width = (
 			config.art_texture.get_width()
 			+ config.box_gap
@@ -191,8 +191,8 @@ func _draw():
 	if config.antenna_visible:
 		_draw_antenna()
 	_draw_background()
-	_draw_speakers()
 	_draw_displayed_texture()
+	_draw_speakers()
 
 
 func _draw_rounded_rect(rect: Rect2, color: Color, radius: float):
@@ -349,7 +349,8 @@ func _draw_background():
 
 
 func _draw_speakers():
-	var speaker_max_radius = config.speaker_radius + config.speaker_bump_radius
+	# Leaving this var in case there is more control over speaker placement later
+	var speaker_max_radius = config.speaker_radius
 	var speaker_y_pos
 	match config.speaker_alignment:
 		RadioConfig.SpeakerAlignment.TOP:
@@ -379,7 +380,8 @@ func _draw_speakers():
 
 # pos is top-left
 func _draw_speaker(pos: Vector2):
-	var speaker_max_radius = config.speaker_radius + config.speaker_bump_radius
+	# Leaving this var in case there is more control over speaker placement later
+	var speaker_max_radius = config.speaker_radius
 	var speaker_animated_dist = _bump_energy * config.speaker_bump_radius
 	var speaker_animated_radius = config.speaker_radius + speaker_animated_dist
 	
@@ -392,7 +394,7 @@ func _draw_speaker(pos: Vector2):
 	# Speaker partitions
 	var partition_base_position = pos + Vector2(
 		speaker_max_radius - speaker_animated_dist,
-		config.speaker_bump_radius - speaker_animated_dist
+		0 * config.speaker_bump_radius - speaker_animated_dist
 	)
 	var partition_width = 2 * speaker_animated_radius / float(2 * config.speaker_partitions + 1)
 	for i in (2 * config.speaker_partitions + 1):
@@ -440,7 +442,7 @@ func _draw_displayed_texture():
 	var art_size = config.art_texture.get_size()
 	var art_position = _box_rect.position + Vector2(
 		config.art_padding if config.speaker_placement == RadioConfig.SpeakerPlacement.RIGHT else (
-			config.speaker_padding + 2 * (config.speaker_radius + config.speaker_bump_radius) + config.box_gap
+			config.speaker_padding + 2 * config.speaker_radius + config.box_gap
 		),
 		config.art_padding
 	)
